@@ -1,0 +1,108 @@
+# Request a ride from fleet.
+service: wild-rydes-ride-fleet
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  stage: "${opt:stage, env:SLS_STAGE, 'dev'}"
+  profile: "${opt:aws-profile, env:AWS_PROFILE, env:AWS_DEFAULT_PROFILE, 'default'}"
+  log_level: "${env:LOG_LEVEL, 'INFO'}"
+
+  unicorn_hash_key: 'Name'
+  unicorn_table_data: 'data/unicorns.json'
+
+provider:
+  name: aws
+  profile: ${self:custom.profile}
+  stage: ${self:custom.stage}
+  runtime: python3.6
+  environment:
+    LOG_LEVEL: ${self:custom.log_level}
+  stackTags:
+    serverless:service: ${self:service}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:Scan
+      Resource:
+        Fn::GetAtt:
+          - UnicornsTable
+          - Arn
+
+
+functions:
+  RequestUnicorn:
+    handler: handlers/get_unicorn.handler
+    description: "Request a Unicorn."
+    memorySize: 128
+    timeout: 30
+    environment:
+      DYNAMODB_TABLE:
+        Ref: UnicornsTable
+      UNICORN_HASH_KEY: "${self:custom.unicorn_hash_key}"
+    events:
+      - http:
+          path: /unicorn
+          method: get
+
+  LoadTable:
+    handler: handlers/load_table.handler
+    description: "Load an initial table."
+    memorySize: 128
+    timeout: 60
+    environment:
+      DYNAMODB_TABLE:
+        Ref: UnicornsTable
+      INITIAL_TABLE_DATA: "${self:custom.unicorn_table_data}"
+
+
+resources:
+  Resources:
+    UnicornsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "${self:custom.unicorn_hash_key}"
+            AttributeType: S
+        KeySchema:
+          - AttributeName: "${self:custom.unicorn_hash_key}"
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+
+    LoadTable:
+      Type: "Custom::LoadTable"
+      Properties:
+        ServiceToken:
+          Fn::GetAtt:
+            - LoadTableLambdaFunction
+            - Arn
+        InvokeUrl:
+          Fn::Join:
+            - ""
+            - - "https://"
+              - Ref: ApiGatewayRestApi
+              - ".execute-api."
+              - Ref: AWS::Region
+              - ".amazonaws.com/${self:custom.stage}"
+
+
+  Outputs:
+    RequestUnicornUrl:
+      Description: "URL to get a unicorn from the fleet."
+      Value:
+        Fn::Join:
+          - ""
+          - - "https://"
+            - Ref: ApiGatewayRestApi
+            - ".execute-api."
+            - Ref: AWS::Region
+            - ".amazonaws.com/${self:custom.stage}"
+            - "/unicorn"
+      Export:
+        Name: "${self:service}-${self:provider.stage}-RequestUnicornUrl"
+
