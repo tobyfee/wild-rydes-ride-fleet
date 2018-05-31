@@ -1,0 +1,8 @@
+config:
+  phases:
+    - duration: 60
+      arrivalRate: 1
+scenarios:
+  - flow:
+    - get:
+        url: '/unicorn'
