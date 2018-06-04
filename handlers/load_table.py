@@ -51,7 +51,7 @@ def create(event, context):
     # None. for that reason, there's a fallback value below.
     resp = {
         "ResourceProperties": properties,
-        "PhysicalResourceId": context.log_stream_name or "RequestId"
+        "PhysicalResourceId": context.log_stream_name or event.get("RequestId")
     }
 
     _logger.info('Response: {}'.format(json.dumps(resp)))
