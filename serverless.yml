@@ -90,6 +90,21 @@ resources:
               - Ref: AWS::Region
               - ".amazonaws.com/${self:custom.stage}"
 
+    ApiEndPointSsmParam:
+      Type: "AWS::SSM::Parameter"
+      Properties:
+        Description: "API endpoint"
+        Name: "/${self:provider.stage}/${self:service}/RequestUnicornUrl"
+        Type: "String"
+        Value:
+          Fn::Join:
+            - ""
+            - - "https://"
+              - Ref: ApiGatewayRestApi
+              - ".execute-api."
+              - Ref: AWS::Region
+              - ".amazonaws.com/${self:custom.stage}"
+              - "/unicorn"
 
   Outputs:
     RequestUnicornUrl:
