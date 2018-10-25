@@ -19,7 +19,7 @@ provider:
   stage: ${self:custom.stage}
   profile: ${self:custom.profile}
   region: ${self:custom.region}
-  cfnRole: "arn:aws:iam::${env:AWS_ACCOUNT}:role/OrganizationAccountAccessDeployRole"
+  cfnRole: "arn:aws:iam::${env:AWS_ACCOUNT}:role/CloudFormationDeployRole"
   environment:
     LOG_LEVEL: ${self:custom.log_level}
   stackTags:
