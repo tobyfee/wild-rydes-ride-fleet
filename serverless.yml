@@ -74,8 +74,8 @@ resources:
           - AttributeName: "${self:custom.unicorn_hash_key}"
             KeyType: HASH
         ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
     LoadTable:
       Type: "Custom::LoadTable"
