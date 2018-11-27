@@ -2,15 +2,18 @@
 [
     {
         "Name": "Bucephalus",
-        "Color": "Golden"
+        "Color": "Golden",
+        "DeviceId": "212dee58-f26a-11e8-b171-8c859074f8c7"
     },
     {
         "Name": "Shadowfax",
-        "Color": "White"
+        "Color": "White",
+        "DeviceId": "21fc3d3a-f26a-11e8-9109-8c859074f8c7"
     },
     {
         "Name": "Rocinante",
-        "Color": "Yellow"
+        "Color": "Yellow",
+        "DeviceId": "2279df58-f26a-11e8-9b3b-8c859074f8c7"
     }
 
 ]
