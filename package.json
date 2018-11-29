@@ -2,7 +2,9 @@
   "name": "wild-rydes-ride-fleet",
   "description": "",
   "version": "0.1.0",
-  "dependencies": {},
+  "dependencies": {
+    "serverless-plugin-thundra-lambda-adapters-cw": "^1.0.2"
+  },
   "devDependencies": {
     "serverless-python-requirements": "^3.3.1"
   },
