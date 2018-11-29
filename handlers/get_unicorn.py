@@ -7,6 +7,10 @@ import random
 
 import boto3
 
+from thundra.thundra_agent import Thundra
+THUNDRA_API_KEY = os.environ.get('THUNDRA_API_KEY', '')
+thundra = Thundra(api_key=THUNDRA_API_KEY)
+
 log_level = os.environ.get('LOG_LEVEL', 'INFO')
 logging.root.setLevel(logging.getLevelName(log_level))  # type:ignore
 _logger = logging.getLogger(__name__)
@@ -31,6 +35,7 @@ def _get_unicorn():
     return unicorn
 
 
+@thundra
 def handler(event, context):
     '''Function entry'''
     _logger.debug('Request: {}'.format(json.dumps(event)))

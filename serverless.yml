@@ -12,6 +12,8 @@ custom:
   unicorn_hash_key: 'Name'
   unicorn_table_data: 'data/unicorns.json'
 
+  thundraApiKey: "${ssm:/thundra/root/api-key}"
+
 provider:
   name: aws
   runtime: python3.6
@@ -20,6 +22,7 @@ provider:
   cfnRole: "arn:aws:iam::${env:AWS_ACCOUNT}:role/CloudFormationDeployRole"
   environment:
     LOG_LEVEL: ${self:custom.log_level}
+    THUNDRA_API_KEY: ${self:custom.thundraApiKey}
   stackTags:
     serverless:service: ${self:service}
   iamRoleStatements:
