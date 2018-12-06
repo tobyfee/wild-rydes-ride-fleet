@@ -6,7 +6,6 @@ plugins:
 
 custom:
   stage: "${opt:stage, env:SLS_STAGE, 'dev'}"
-  profile: "${opt:aws-profile, env:AWS_PROFILE, env:AWS_DEFAULT_PROFILE, 'default'}"
   region: "${opt:region, 'us-east-2'}"
   log_level: "${env:LOG_LEVEL, 'INFO'}"
 
@@ -17,7 +16,6 @@ provider:
   name: aws
   runtime: python3.6
   stage: ${self:custom.stage}
-  profile: ${self:custom.profile}
   region: ${self:custom.region}
   cfnRole: "arn:aws:iam::${env:AWS_ACCOUNT}:role/CloudFormationDeployRole"
   environment:
