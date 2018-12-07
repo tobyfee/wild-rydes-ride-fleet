@@ -39,7 +39,7 @@ functions:
     handler: handlers/get_unicorn.handler
     description: "Request a Unicorn."
     memorySize: 128
-    timeout: 30
+    timeout: 29
     environment:
       DYNAMODB_TABLE:
         Ref: UnicornsTable
