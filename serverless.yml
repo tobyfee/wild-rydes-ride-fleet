@@ -51,6 +51,9 @@ functions:
       - http:
           path: /unicorn
           method: get
+          authorizer:
+            arn: ${ssm:/wild-rydes-api-auth/${self:provider.stage}/Arn}
+            identitySource: method.request.header.x-api-key
 
   LoadTable:
     handler: handlers/load_table.handler
